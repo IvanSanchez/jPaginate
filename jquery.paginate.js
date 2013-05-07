@@ -67,8 +67,8 @@
         }
 
         if(o.rotate){
-            if(o.images) var _rotleft  = $(document.createElement('span')).addClass(spreviousclass);
-            else var _rotleft = $(document.createElement('span')).addClass(spreviousclass).html('&laquo;');
+            if(o.images) var _rotleft  = $(document.createElement('a')).addClass(spreviousclass);
+            else var _rotleft = $(document.createElement('a')).addClass(spreviousclass).html('Anterior');
         }
 
         var _divwrapleft = $(document.createElement('div')).addClass('jPag-control-back');
@@ -95,8 +95,8 @@
         _ulwrapdiv.append(_ul);
 
         if(o.rotate){
-            if(o.images) var _rotright = $(document.createElement('span')).addClass(snextclass);
-            else var _rotright = $(document.createElement('span')).addClass(snextclass).html('&raquo;');
+            if(o.images) var _rotright = $(document.createElement('a')).addClass(snextclass);
+            else var _rotright = $(document.createElement('a')).addClass(snextclass).html('Siguiente');
         }
 
         var _last = $(document.createElement('a')).addClass('jPag-last').html(o.last);
@@ -170,89 +170,108 @@
         var outsidewidth = outsidewidth_tmp - _first.parent().width() -3;
         if(ver == 'ie7'){
             _ulwrapdiv.css('width',outsidewidth+72+'px');
-            _divwrapright.css('left',outsidewidth_tmp+6+72+'px');
+            _divwrapright.css('left',outsidewidth_tmp+72+'px');
             outsidewidth_tmp += _divwrapright.width();
             if (_divpagechoice) {
-                _divpagechoice.css('left', outsidewidth_tmp+6+72+'px');
+                _divpagechoice.css('left', outsidewidth_tmp+72+'px');
                 outsidewidth_tmp += _divpagechoice.width();
             }
             if (_divitemcount) {
-                _divitemcount.css('left', outsidewidth_tmp+6+72+'px');
+                _divitemcount.css('left', outsidewidth_tmp+72+'px');
             }
         }
         else{
-            _ulwrapdiv.css('width',outsidewidth+'px');
-            _divwrapright.css('left',outsidewidth_tmp+6+'px');
-            outsidewidth_tmp += _divwrapright.width();
+					_ulwrapdiv.css('width',outsidewidth+'px');
+					_ulwrapdiv.css('margin-left','-6px');
+					_divwrapright.css('left',outsidewidth_tmp+'px');
+					_divwrapright.css('margin-left','-6px');
+					outsidewidth_tmp += _divwrapright.width();
             if (_divpagechoice) {
-                _divpagechoice.css('left', outsidewidth_tmp+6+'px');
+                _divpagechoice.css('left', outsidewidth_tmp+'px');
                 outsidewidth_tmp += _divpagechoice.width();
             }
             if (_divitemcount) {
-                _divitemcount.css('left', outsidewidth_tmp+6+'px');
+                _divitemcount.css('left', outsidewidth_tmp+'px');
             }
         }
 
         if(o.rotate){
-            _rotright.hover(
-                function() {
-                  thumbs_scroll_interval = setInterval(
-                    function() {
-                      var left = _ulwrapdiv.scrollLeft() + 1;
-                      _ulwrapdiv.scrollLeft(left);
-                    },
-                    20
-                  );
-                },
-                function() {
-                  clearInterval(thumbs_scroll_interval);
-                }
-            );
-            _rotleft.hover(
-                function() {
-                  thumbs_scroll_interval = setInterval(
-                    function() {
-                      var left = _ulwrapdiv.scrollLeft() - 1;
-                      _ulwrapdiv.scrollLeft(left);
-                    },
-                    20
-                  );
-                },
-                function() {
-                  clearInterval(thumbs_scroll_interval);
-                }
-            );
-            if(o.mouse == 'press'){
-                _rotright.mousedown(
-                    function() {
-                      thumbs_mouse_interval = setInterval(
-                        function() {
-                          var left = _ulwrapdiv.scrollLeft() + 5;
-                          _ulwrapdiv.scrollLeft(left);
-                        },
-                        20
-                      );
-                    }
-                ).mouseup(
-                    function() {
-                      clearInterval(thumbs_mouse_interval);
-                    }
-                );
-                _rotleft.mousedown(
-                    function() {
-                      thumbs_mouse_interval = setInterval(
-                        function() {
-                          var left = _ulwrapdiv.scrollLeft() - 5;
-                          _ulwrapdiv.scrollLeft(left);
-                        },
-                        20
-                      );
-                    }
-                ).mouseup(
-                    function() {
-                      clearInterval(thumbs_mouse_interval);
-                    }
-                );
+//             _rotright.hover(
+//                 function() {
+//                   thumbs_scroll_interval = setInterval(
+//                     function() {
+//                       var left = _ulwrapdiv.scrollLeft() + 1;
+//                       _ulwrapdiv.scrollLeft(left);
+//                     },
+//                     20
+//                   );
+//                 },
+//                 function() {
+//                   clearInterval(thumbs_scroll_interval);
+//                 }
+//             );
+//             _rotleft.hover(
+//                 function() {
+//                   thumbs_scroll_interval = setInterval(
+//                     function() {
+//                       var left = _ulwrapdiv.scrollLeft() - 1;
+//                       _ulwrapdiv.scrollLeft(left);
+//                     },
+//                     20
+//                   );
+//                 },
+//                 function() {
+//                   clearInterval(thumbs_scroll_interval);
+//                 }
+//             );
+            if(o.mouse == 'press'){	/// FIXME
+
+
+							_rotright.click( function(ev) {	// Next
+								// Find the clicked element, trasverse the DOM tree until the button next to the selected one is found, then click on it.
+
+// 								console.log( $(ev.currentTarget.parentNode.parentNode).find('.jPag-current').parent().next().children() );
+
+								$(ev.currentTarget.parentNode.parentNode).find('.jPag-current').parent().next().children().click()
+
+							});
+
+							_rotleft.click( function(ev) {	// Previous
+
+								$(ev.currentTarget.parentNode.parentNode).find('.jPag-current').parent().prev().children().click()
+
+							});
+
+//                 _rotright.mousedown(
+//                     function() {
+//                       thumbs_mouse_interval = setInterval(
+//                         function() {
+//                           var left = _ulwrapdiv.scrollLeft() + 5;
+//                           _ulwrapdiv.scrollLeft(left);
+//                         },
+//                         20
+//                       );
+//                     }
+//                 ).mouseup(
+//                     function() {
+//                       clearInterval(thumbs_mouse_interval);
+//                     }
+//                 );
+//                 _rotleft.mousedown(
+//                     function() {
+//                       thumbs_mouse_interval = setInterval(
+//                         function() {
+//                           var left = _ulwrapdiv.scrollLeft() - 5;
+//                           _ulwrapdiv.scrollLeft(left);
+//                         },
+//                         20
+//                       );
+//                     }
+//                 ).mouseup(
+//                     function() {
+//                       clearInterval(thumbs_mouse_interval);
+//                     }
+//                 );
             }
             else{
                 _rotleft.click(function(e){
@@ -297,12 +316,30 @@
             if(ver == 'ie7')
                 _ulwrapdiv.animate({scrollLeft: left + tmp - _first.parent().width() + 52 + 'px'});
             else
-                _ulwrapdiv.animate({scrollLeft: left + tmp - _first.parent().width() + 'px'});
+                _ulwrapdiv.animate({scrollLeft: left + tmp - _first.parent().width() + 21 + 'px'});
             if (typeof $pagechoicevalue != 'undefined') {
                 $pagechoicevalue.val(currval);
             }
             o.onChange(currval, typeof $itemcountvalue != 'undefined' ? $itemcountvalue.val() : null);
-        });
+
+// 						console.log(	$(e.currentTarget.parentNode.parentNode).find('.jPag-current').parent()		);
+						// Check if it's first page or last page, disable buttons in that case
+						if (!$(e.currentTarget.parentNode.parentNode).find('.jPag-current').parent().prev().length)
+							$(".jPag-sprevious,.jPag-first").addClass("ui-state-disabled");
+						else
+							$(".jPag-sprevious,.jPag-first").removeClass("ui-state-disabled");
+
+						if (!$(e.currentTarget.parentNode.parentNode).find('.jPag-current').parent().next().length)
+							$(".jPag-snext,.jPag-last").addClass("ui-state-disabled");
+						else
+							$(".jPag-snext,.jPag-last").removeClass("ui-state-disabled");
+				});
+
+				if (o.min == o.start)
+					$(".jPag-sprevious,.jPag-first").addClass("ui-state-disabled");
+
+				if (max == o.start)
+					$(".jPag-snext,.jPag-last").addClass("ui-state-disabled");
 
         var last = _ulwrapdiv.find('li').eq(o.start-1);
         last.attr('id','tmp');
@@ -311,6 +348,9 @@
         var tmp = left - (outsidewidth / 2);
         if(ver == 'ie7') _ulwrapdiv.animate({scrollLeft: left + tmp - _first.parent().width() + 52 + 'px'});
         else _ulwrapdiv.animate({scrollLeft: left + tmp - _first.parent().width() + 'px'});
+
+
+
     }
 
     $.fn.applystyle = function(o,obj,a_css,hover_css,_first,_ul,_ulwrapdiv,_divwrapright){
